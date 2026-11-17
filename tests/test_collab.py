@@ -177,6 +177,10 @@ class ValidateTests(TmpRoot):
     def test_scopes(self):
         r = validate_env.check_gh_auth(FakeGh(scopes="repo, project"))
         self.assertEqual([c["status"] for c in r], ["PASS", "FAIL"])
+        r = validate_env.check_gh_auth(lambda a, i=None: fail("dial tcp: no such host"))
+        self.assertEqual([c["status"] for c in r], ["UNKNOWN"])
+        r = validate_env.check_gh_auth(lambda a, i=None: fail("To get started with GitHub CLI, please run: gh auth login"))
+        self.assertEqual([c["status"] for c in r], ["FAIL"])
         r = validate_env.check_gh_auth(lambda a, i=None: lib.Result(127, "", "no gh"))
         self.assertEqual([c["status"] for c in r], ["UNKNOWN"])
 
@@ -237,6 +241,41 @@ class InitTests(TmpRoot):
         st = [s for s in init.steps if s.name == "Project Status 옵션"][0]
         self.assertEqual(st.status, "FAIL")
         self.assertFalse(any(c[:3] == ["api", "graphql", "--input"] for c in writes.calls))
+
+    def test_status_truncated_items_not_touched(self):
+        proj = [{"id": "P1", "title": "r", "number": 1}]
+
+        class Big(FakeGh):
+            def _gql(self, q):
+                d = super()._gql(q)
+                if "field(name" in q:
+                    d["node"]["items"]["totalCount"] = 150  # 노드는 0개만 반환
+                return d
+        writes = FakeGh()
+        init, _ = self.make(Big(labels=[], projects=proj, status=["Todo", "Done"]), writes)
+        init.run()
+        st = [s for s in init.steps if s.name == "Project Status 옵션"][0]
+        self.assertEqual(st.status, "FAIL")
+        self.assertIn("100", st.detail)
+        self.assertFalse(any(c[:3] == ["api", "graphql", "--input"] for c in writes.calls))
+
+    def test_is_unsupported_only_plan_messages(self):
+        u = init_project._is_unsupported
+        self.assertTrue(u("Upgrade to GitHub Pro or make this repository public to enable this feature. (HTTP 403)"))
+        self.assertFalse(u("Resource not accessible by integration (HTTP 403)"))
+        self.assertFalse(u("Not Found (HTTP 404)"))
+        self.assertFalse(u("Branch not found: plan B"))
+
+    def test_protection_permission_error_is_fail(self):
+        class Denied(FakeGh):
+            def __call__(self, args, input_text=None):
+                if "PUT" in args:
+                    return fail("gh: Resource not accessible by personal access token (HTTP 403)")
+                return super().__call__(args, input_text)
+        init, _ = self.make(FakeGh(), Denied(), protect_main=True)
+        init.run()
+        st = [s for s in init.steps if s.name == "main 브랜치 보호"][0]
+        self.assertEqual(st.status, "FAIL")
 
     def test_no_protection_without_flag(self):
         writes = FakeGh()

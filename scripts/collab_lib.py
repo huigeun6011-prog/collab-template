@@ -257,7 +257,10 @@ def get_status_field(runner, project_id):
     used = sorted({(n.get("fieldValueByName") or {}).get("name")
                    for n in items.get("nodes") or []
                    if (n.get("fieldValueByName") or {}).get("name")})
-    info = {"total": items.get("totalCount", 0), "used_options": used}
+    nodes = items.get("nodes") or []
+    total = items.get("totalCount", 0)
+    # 첫 100개만 조회하므로 total이 더 크면 사용 여부를 전부 알 수 없다.
+    info = {"total": total, "used_options": used, "truncated": total > len(nodes)}
     field = node.get("field")
     if not field or "options" not in field:
         return None, info, "Status 단일 선택 필드가 없음"

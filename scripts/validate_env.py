@@ -60,8 +60,11 @@ def check_gh_auth(gh):
     if r.rc == 127:
         return [check("gh 인증", UNKNOWN, r.err.strip())]
     if r.rc != 0:
-        return [check("gh 인증", FAIL, "인증되지 않음 또는 API 실패 (gh auth login 필요): %s"
-                      % r.err.strip().splitlines()[0] if r.err.strip() else "인증 실패")]
+        msg = r.err.strip().splitlines()[0] if r.err.strip() else "실패"
+        low = (r.err + r.out).lower()
+        if any(h in low for h in ("gh auth login", "not logged in", "http 401", "bad credentials")):
+            return [check("gh 인증", FAIL, "인증되지 않음 (gh auth login 필요): %s" % msg)]
+        return [check("gh 인증", UNKNOWN, "확인하지 못함 (네트워크 오류 등): %s" % msg)]
     out = [check("gh 인증", PASS)]
     m = re.search(r"^x-oauth-scopes:\s*(.*)$", r.out, re.I | re.M)
     if not m:

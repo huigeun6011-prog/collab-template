@@ -30,10 +30,13 @@ class Step:
         self.name, self.status, self.detail = name, status, detail
 
 
+PLAN_LIMIT_PHRASES = ("upgrade to github pro", "make this repository public")
+
+
 def _is_unsupported(err):
+    """요금제 제한을 가리키는 GitHub 메시지만 지원 안 됨으로 본다. 그 외 403/404는 FAIL."""
     e = err.lower()
-    return any(s in e for s in ("upgrade to github pro", "http 403", "http 404",
-                                "not available", "must have admin", "plan"))
+    return any(p in e for p in PLAN_LIMIT_PHRASES)
 
 
 class Initializer:
@@ -139,6 +142,11 @@ class Initializer:
         want = lib.STATUS_OPTIONS
         if cur == want:
             return self.add(Step(name, "SKIP", "이미 같음: " + ", ".join(cur)))
+        if items.get("truncated"):
+            return self.add(Step(name, "FAIL",
+                "프로젝트 항목이 %d개로 조회 한도(100)를 넘어 Status 사용 여부를 전부 확인할 수 없어 "
+                "옵션을 바꾸지 않음. 대안: GitHub UI에서 직접 맞추거나 항목을 정리한 뒤 재실행"
+                % items["total"]))
         if items["total"] and items["used_options"]:
             # 옵션을 교체하면 옵션 ID가 바뀌어 붙어 있는 이슈의 Status가 지워질 수 있다. (추정)
             return self.add(Step(name, "FAIL",
@@ -190,8 +198,8 @@ class Initializer:
             return self.add(Step(name, "OK", "적용함"))
         if _is_unsupported(r.err + r.out):
             return self.add(Step(name, "UNSUPPORTED",
-                "지원 안 됨 (요금제 또는 권한): %s 대안: 공개 저장소로 전환하거나 유료 플랜 사용 "
-                "(공개 범위 변경은 사용자 승인 필요)" % r.err.strip()))
+                "지원 안 됨 (요금제 제한): %s 대안: 유료 플랜 사용 또는 공개 저장소 전환. "
+                "공개 범위 변경과 유료 서비스 도입은 사람 승인 필요 (이 스크립트는 하지 않음)" % r.err.strip()))
         self.add(Step(name, "FAIL", r.err.strip()))
 
     # 5. 버전 파일
