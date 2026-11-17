@@ -1,6 +1,6 @@
 name: 결함 (Bug)
 description: 동작이 기대와 다른 문제
-title: "fix: <요약>"
+title: "[AI-<ROLE>-<NN>] fix: <요약>"
 labels: ["type:bug"]
 body:
   - type: textarea
