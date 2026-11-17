@@ -26,5 +26,7 @@ body:
   - type: input
     id: agent
     attributes:
-      label: 담당 식별자
-      description: "예: AI-DEV-01 또는 HUMAN-홍길동. 미정이면 비워 둔다."
+      label: Agent
+      description: "이 이슈를 작성하거나 담당하는 식별자. 예: AI-DEV-01, HUMAN-홍길동"
+    validations:
+      required: true
