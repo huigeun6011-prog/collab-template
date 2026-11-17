@@ -45,7 +45,7 @@ Agent: AI-DEV-01
 **[AI-QA-01]** 리뷰 결과: 통과
 ```
 
-**라벨:** `agent:<식별자 소문자>` (예: `agent:dev-01`). 담당자 표시용이다.
+**라벨:** 식별자에서 `AI-`를 떼고 소문자로 쓴 `agent:<role>-<nn>` (예: `AI-DEV-01` → `agent:dev-01`, `AI-BOOTSTRAP-01` → `agent:bootstrap-01`). 사람은 `agent:human`. 담당자 표시용이다. 새 식별자를 쓰기 전에 해당 라벨을 만든다.
 
 ## 선택 기록
 
@@ -65,5 +65,5 @@ Session: <세션 또는 실행 ID>
 
 ## 한계와 확장
 
-- 자기 신고 방식이라 위조할 수 있다. 신뢰 경계가 필요하면 GitHub Apps로 에이전트별 인증 주체를 분리한다. (Phase 4)
+- 자기 신고 방식이라 위조할 수 있다. 신뢰 경계가 필요하면 GitHub Apps로 에이전트별 인증 주체를 분리한다. (장기 과제, 필요해지면 `type:decision` Issue로 제안)
 - 같은 계정이므로 에이전트가 쓴 PR을 GitHub의 정식 Approve로 승인할 수 없다.
