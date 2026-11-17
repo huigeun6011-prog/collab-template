@@ -1,6 +1,6 @@
 name: 업무 (Task)
 description: 구현, 문서, 조사 등 일반 업무
-title: "<type>: <요약>"
+title: "[AI-<ROLE>-<NN>] <type>: <요약>"
 labels: ["type:task"]
 body:
   - type: textarea

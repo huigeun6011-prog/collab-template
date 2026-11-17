@@ -41,6 +41,8 @@ git worktree remove ../<저장소>-wt/issue-<번호>   # 작업 종료 후
 
 `<type>: <요약>` 한 줄, 빈 줄, 본문(선택), 그리고 trailer.
 
+Issue와 PR의 제목은 `[AI-DEV-01] <type>: <요약>`처럼 담당 식별자를 접두어로 붙인다. ([규칙](docs/AGENT-IDENTITY.md))
+
 ```
 docs: AGENTS.md 추가
 
