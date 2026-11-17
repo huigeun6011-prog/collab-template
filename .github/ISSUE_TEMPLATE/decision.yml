@@ -1,0 +1,31 @@
+name: 의사결정 (Decision)
+description: 선택이 필요한 사안. 결론이 나면 ADR로 남긴다.
+title: "decision: <요약>"
+labels: ["type:decision"]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: 배경
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: 선택지와 장단점
+    validations:
+      required: true
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: 권장안과 이유
+  - type: dropdown
+    id: approver
+    attributes:
+      label: 승인 주체
+      description: AGENTS.md 6절의 항목이면 사람 승인이 필요하다.
+      options:
+        - 사람 승인 필요
+        - 에이전트 리뷰로 충분
+    validations:
+      required: true
