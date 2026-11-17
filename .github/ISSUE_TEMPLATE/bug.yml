@@ -1,0 +1,36 @@
+name: 결함 (Bug)
+description: 동작이 기대와 다른 문제
+title: "fix: <요약>"
+labels: ["type:bug"]
+body:
+  - type: textarea
+    id: actual
+    attributes:
+      label: 실제 동작
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 기대 동작
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: 재현 방법
+      description: 확인한 사실만 쓴다. 재현하지 못했다면 "재현 불가"라고 쓴다.
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: 환경
+      description: OS, 도구 버전, 관련 커밋 등
+  - type: input
+    id: agent
+    attributes:
+      label: Agent
+      description: "이 이슈를 작성하거나 담당하는 식별자. 예: AI-DEV-01, HUMAN-홍길동"
+    validations:
+      required: true

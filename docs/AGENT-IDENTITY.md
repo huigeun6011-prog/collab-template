@@ -33,6 +33,8 @@
 Agent: AI-DEV-01
 ```
 
+이슈 폼(`.github/ISSUE_TEMPLATE/`)은 줄 단위 표기를 만들 수 없으므로 필수 입력 항목 `Agent`가 본문에 `### Agent` 섹션으로 기록된다. 이 섹션이 이슈의 `Agent:` 줄을 대신한다.
+
 **커밋 메시지 trailer**
 
 ```
