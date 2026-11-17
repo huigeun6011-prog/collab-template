@@ -33,3 +33,6 @@
 - name: "agent:qa-01"
   color: "c5def5"
   description: "AI-QA-01"
+- name: "agent:dev-01"
+  color: "c5def5"
+  description: "AI-DEV-01"
