@@ -31,7 +31,7 @@ type: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`
 한 디렉터리에서 브랜치를 전환하지 않는다. 작업마다 별도 worktree를 쓴다.
 
 ```
-git worktree add ../<저장소>-wt/issue-<번호> -b <브랜치>
+git worktree add ../<저장소>-wt/issue-<번호> -b <브랜치> main
 git worktree remove ../<저장소>-wt/issue-<번호>   # 작업 종료 후
 ```
 
@@ -66,7 +66,7 @@ Agent: AI-DOC-01
 [ADR-0002](docs/adr/0002-agent-review-and-merge-delegation.md)를 따른다. 요약:
 
 - 독립 리뷰가 `통과`이고 검증 결과에 문제가 없으면 에이전트가 Merge할 수 있다.
-- 다음은 사람의 승인이 먼저 필요하다: 저장소 공개 범위 변경, 삭제, 강제 push, 권한 확대, 유료 서비스, 브랜치 보호 변경, 버전 태그 릴리스.
+- 다음은 사람의 승인이 먼저 필요하다: 저장소 공개 범위 변경, 삭제, 강제 push, 중요 데이터 삭제, 권한 확대, 유료 서비스, 브랜치 보호 변경, 버전 태그 릴리스.
 - Merge 방식은 squash를 기본으로 한다.
 
 ## Kanban

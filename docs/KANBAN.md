@@ -34,7 +34,7 @@ Issue 본문에 `Depends on #N`을 적는다. 의존 대상이 닫히기 전에�
 
 ## 담당자
 
-Issue 본문과 라벨(`agent:<식별자>`)로 표시한다. 단일 GitHub 계정 사용 중이므로 Assignees 필드는 에이전트를 구분하지 못한다.
+Issue 본문의 `Agent:` 줄과 라벨(`agent:<role>-<nn>`, [규칙](AGENT-IDENTITY.md))로 표시한다. 단일 GitHub 계정 사용 중이므로 Assignees 필드는 에이전트를 구분하지 못한다.
 
 ## 완료 조건
 
